@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ChatGPT Ads Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky step rail on the left, one "stage" on the right showing a recreated Ads Manager screen with an animated cursor, instructions underneath. */
+:root {
+  --bg: #f3f5f3;
+  --surface: #ffffff;
+  --fg: #18201c;
+  --muted: #5b6660;
+  --line: #d9dfdb;
+  --accent: #0b7559;
+  --accent-soft: #dff1ea;
+  --web: #8a5800;
+  --web-soft: #fbefd6;
+  --warn-fg: #8f3b12;
+  --warn-soft: #fdebe1;
+  /* recreated product UI stays light in both themes, like a screenshot */
+  --m-bg: #ffffff;
+  --m-fg: #121212;
+  --m-muted: #6c6c6c;
+  --m-line: #e4e4e4;
+  --m-fill: #f4f4f4;
+  --m-ink: #0e0e0e;
+  --m-ink-fg: #ffffff;
+  --m-dim: rgba(20, 20, 20, .38);
+  --m-red: #c9362b;
+  --m-blue: #2c5fd6;
+  --cursor: #111111;
+  --display: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111513; --surface: #191e1b; --fg: #e5ebe7; --muted: #98a39d; --line: #2a312d;
+    --accent: #45c39b; --accent-soft: #15332a; --web: #e6b65c; --web-soft: #33280f;
+    --warn-fg: #f2a37c; --warn-soft: #3a2117; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111513; --surface: #191e1b; --fg: #e5ebe7; --muted: #98a39d; --line: #2a312d;
+  --accent: #45c39b; --accent-soft: #15332a; --web: #e6b65c; --web-soft: #33280f;
+  --warn-fg: #f2a37c; --warn-soft: #3a2117; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+img { max-width: 100%; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 48px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* header */
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 32px; }
+.top-text { display: flex; flex-direction: column; gap: 8px; max-width: 680px; min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { font-size: clamp(26px, 4vw, 38px); line-height: 1.12; font-weight: 700; letter-spacing: -.015em; }
+.lede { color: var(--muted); margin: 0; max-width: 64ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; }
+.src { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.src::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.src.rec { color: var(--accent); background: var(--accent-soft); }
+.src.web { color: var(--web); background: var(--web-soft); }
+
+.progress { height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.progress i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .35s ease; }
+
+/* shell */
+.shell { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 28px; align-items: start; }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); display: flex; flex-direction: column; gap: 18px; max-height: calc(100vh - 32px); overflow: auto; padding-right: 4px; }
+.phase { display: flex; flex-direction: column; gap: 2px; }
+.phase-name { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 0 10px 4px; }
+.step-btn { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start; text-align: left; background: none; border: 0; border-radius: 8px; padding: 7px 10px; cursor: pointer; color: var(--fg); }
+.step-btn:hover { background: var(--surface); }
+.step-btn .n { font-variant-numeric: tabular-nums; font-size: 12px; font-weight: 600; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); color: var(--muted); margin-top: 1px; }
+.step-btn.web .n { border-style: dashed; border-color: var(--web); color: var(--web); }
+.step-btn .t { font-size: 14px; line-height: 1.35; }
+.step-btn.done .n { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+.step-btn.on { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+.step-btn.on .n { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.step-btn.on .t { font-weight: 600; }
+
+.stage-col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.step-head { display: flex; flex-direction: column; gap: 6px; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+.meta b { color: var(--fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+h2 { font-size: clamp(22px, 2.6vw, 28px); line-height: 1.2; font-weight: 650; letter-spacing: -.01em; }
+
+.stage { position: relative; border-radius: 14px; background: color-mix(in srgb, var(--line) 55%, var(--bg)); padding: clamp(12px, 2.4vw, 26px); overflow: hidden; }
+.cursor { position: absolute; left: 0; top: 0; width: 22px; height: 22px; pointer-events: none; z-index: 5; transform: translate(40px, 40px); transition: transform .9s cubic-bezier(.45,.05,.25,1); }
+.cursor svg { display: block; filter: drop-shadow(0 1px 1.5px rgba(0,0,0,.35)); }
+.cursor .ring { position: absolute; left: -12px; top: -12px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; }
+.cursor.click .ring { animation: ring .6s ease-out; }
+@keyframes ring { 0% { opacity: .9; transform: scale(.3); } 100% { opacity: 0; transform: scale(1.8); } }
+.hl { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 55%, transparent) !important; transition: box-shadow .3s; }
+
+.details { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.card h3 { font-size: 13px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.card ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 7px; }
+.card li::marker { color: var(--muted); font-variant-numeric: tabular-nums; }
+.card p { margin: 0; }
+.tip { background: var(--warn-soft); border-color: transparent; }
+.tip h3 { color: var(--warn-fg); }
+code, .kbd { font-family: var(--mono); font-size: .86em; background: color-mix(in srgb, var(--line) 60%, transparent); padding: 1px 5px; border-radius: 4px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.controls .grp { display: flex; gap: 8px; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.hint { font-size: 12px; color: var(--muted); }
+
+footer { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--muted); }
+footer ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 3px; }
+footer a { color: var(--accent); }
+
+/* ---------- recreated Ads Manager UI ---------- */
+.m-win { background: var(--m-bg); color: var(--m-fg); border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.10); overflow: hidden; font-size: 13px; line-height: 1.4; }
+.m-bar { display: flex; align-items: center; gap: 12px; padding: 9px 12px; background: var(--m-fill); border-bottom: 1px solid var(--m-line); }
+.m-dots { display: flex; gap: 6px; }
+.m-dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--m-line); }
+.m-url { flex: 1; min-width: 0; background: var(--m-bg); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--m-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-body { position: relative; min-height: 380px; }
+.m-app { display: grid; grid-template-columns: 150px 1fr; min-height: 380px; }
+.m-nav { border-right: 1px solid var(--m-line); padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; }
+.m-brand { font-weight: 700; font-size: 13px; padding: 2px 8px 10px; }
+.m-brand em { font-style: normal; font-weight: 500; font-size: 10px; border: 1px solid var(--m-line); border-radius: 4px; padding: 0 4px; margin-left: 4px; color: var(--m-muted); }
+.m-navi { padding: 6px 8px; border-radius: 6px; color: var(--m-fg); }
+.m-navi.sub { padding-left: 20px; color: var(--m-muted); }
+.m-navi.on { background: var(--m-fill); font-weight: 600; color: var(--m-fg); }
+.m-main { padding: 16px 18px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.m-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.m-title { font-size: 16px; font-weight: 600; }
+.m-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 999px; padding: 7px 14px; font-weight: 600; font-size: 12.5px; background: var(--m-ink); color: var(--m-ink-fg); white-space: nowrap; }
+.m-btn.ghost { background: var(--m-bg); color: var(--m-fg); border: 1px solid var(--m-line); }
+.m-btn.wide { display: flex; width: 100%; padding: 10px; }
+.m-field { display: flex; flex-direction: column; gap: 5px; }
+.m-field label { font-weight: 500; font-size: 12.5px; }
+.m-input { border: 1px solid var(--m-line); border-radius: 8px; padding: 8px 10px; background: var(--m-bg); display: flex; align-items: center; gap: 8px; min-height: 34px; overflow: hidden; }
+.m-input > span:first-child { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-input.ph { color: var(--m-muted); }
+.m-input.fill { background: var(--m-fill); }
+.m-input.sel::after { content: "⌄"; margin-left: auto; color: var(--m-muted); line-height: 1; padding-bottom: 6px; }
+.m-input.focus { border-color: var(--m-ink); box-shadow: 0 0 0 1px var(--m-ink); }
+.m-input.err { border-color: var(--m-red); }
+.m-count { margin-left: auto; font-size: 11px; color: var(--m-muted); font-variant-numeric: tabular-nums; }
+.m-count.over { color: var(--m-red); }
+.m-help { font-size: 11px; color: var(--m-muted); }
+.m-help.warn { color: var(--m-red); }
+.m-chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--m-fg); border-radius: 999px; padding: 2px 10px; font-size: 12px; width: fit-content; }
+.m-toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; }
+.m-toggle i { width: 30px; height: 17px; border-radius: 999px; background: var(--m-ink); position: relative; }
+.m-toggle i::after { content: ""; position: absolute; right: 2px; top: 2px; width: 13px; height: 13px; border-radius: 50%; background: var(--m-ink-fg); }
+.m-check { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; }
+.m-check i { width: 15px; height: 15px; border-radius: 3px; background: var(--m-ink); position: relative; }
+.m-check i::after { content: ""; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px; border: solid var(--m-ink-fg); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.m-radio { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; }
+.m-radio i { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--m-muted); }
+.m-radio.on i { border: 4px solid var(--m-ink); }
+.m-code { font-family: var(--mono); font-size: 11px; background: var(--m-fill); border-radius: 8px; padding: 9px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--m-fg); }
+.m-code b { color: var(--m-red); font-weight: 400; }
+.m-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+.m-kv { display: flex; flex-direction: column; gap: 1px; }
+.m-kv span { color: var(--m-muted); font-size: 11.5px; }
+.m-panel { border: 1px solid var(--m-line); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.m-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.m-table th { text-align: left; font-weight: 500; color: var(--m-muted); padding: 6px 8px; border-bottom: 1px solid var(--m-line); }
+.m-table td { padding: 8px; border-bottom: 1px solid var(--m-line); vertical-align: top; }
+.m-pill { display: inline-block; border-radius: 4px; padding: 0 6px; background: var(--m-fill); font-size: 11px; }
+.m-stats { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--m-line); border-radius: 10px; }
+.m-stats div { padding: 10px 12px; border-right: 1px solid var(--m-line); }
+.m-stats div:last-child { border-right: 0; }
+.m-stats b { display: block; font-size: 18px; font-weight: 500; }
+.m-stats span { color: var(--m-muted); font-size: 11.5px; }
+
+.m-scrim { position: absolute; inset: 0; background: var(--m-dim); display: grid; place-items: center; padding: 18px; }
+.m-modal { background: var(--m-bg); border-radius: 12px; width: min(400px, 100%); padding: 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 16px 40px rgba(0,0,0,.25); }
+.m-modal h4 { margin: 0; font-size: 18px; line-height: 1.25; font-weight: 650; }
+.m-feature { display: grid; grid-template-columns: 28px 1fr; gap: 10px; border: 1px solid var(--m-line); background: var(--m-fill); border-radius: 10px; padding: 9px 10px; }
+.m-feature i { width: 28px; height: 28px; border-radius: 8px; background: var(--m-bg); display: grid; place-items: center; font-style: normal; font-size: 13px; }
+.m-feature b { display: block; font-size: 12.5px; }
+.m-feature span { color: var(--m-muted); font-size: 11.5px; }
+.m-fine { font-size: 10.5px; color: var(--m-muted); }
+
+.m-center { display: grid; place-items: center; padding: 28px 18px; min-height: 380px; background: var(--m-fill); }
+.m-card { background: var(--m-bg); border: 1px solid var(--m-line); border-radius: 12px; width: min(420px, 100%); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.m-card h4 { margin: 0; font-size: 18px; font-weight: 650; }
+.m-card p { margin: 0; color: var(--m-muted); font-size: 12.5px; }
+.m-list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.m-list li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; font-size: 12.5px; }
+.m-list li::before { content: "✓"; font-weight: 700; }
+.m-link { color: var(--m-blue); text-decoration: underline; font-size: 12px; }
+
+.m-wiz { display: flex; flex-direction: column; min-height: 420px; }
+.m-wiz-head { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--m-line); font-weight: 600; }
+.m-wiz-body { display: grid; grid-template-columns: 190px 1fr; flex: 1; }
+.m-tree { border-right: 1px solid var(--m-line); padding: 14px 12px; display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; }
+.m-tree .s { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.m-tree .s i { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; font-style: normal; background: var(--m-fill); color: var(--m-muted); flex: none; }
+.m-tree .s.done i { background: var(--m-ink); color: var(--m-ink-fg); }
+.m-tree .s.on i { background: var(--m-ink); color: var(--m-ink-fg); }
+.m-tree .c { padding: 3px 8px 3px 26px; color: var(--m-fg); border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-tree .c.l2 { padding-left: 38px; }
+.m-tree .c.l3 { padding-left: 50px; }
+.m-tree .c.on { background: var(--m-fill); }
+.m-tree .c.add { color: var(--m-muted); }
+.m-form { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.m-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; border-top: 1px solid var(--m-line); flex-wrap: wrap; }
+.m-foot .r { display: flex; gap: 8px; align-items: center; margin-left: auto; flex-wrap: wrap; justify-content: flex-end; }
+.m-thumb { width: 52px; height: 52px; border-radius: 6px; background: linear-gradient(135deg, #4b5d3a, #c9a64a 60%, #2f3a26); }
+.m-toast { position: absolute; right: 14px; bottom: 14px; background: var(--m-bg); border: 1px solid var(--m-line); border-radius: 10px; padding: 9px 12px; box-shadow: 0 6px 18px rgba(0,0,0,.12); display: flex; gap: 8px; align-items: center; font-size: 12.5px; }
+.m-toast i { width: 16px; height: 16px; border-radius: 50%; background: #1f9d55; color: #fff; font-style: normal; font-size: 10px; display: grid; place-items: center; }
+.m-banner { border: 1px solid var(--m-line); background: var(--m-fill); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
+.m-steps4 { display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+.m-steps4 div { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dashed var(--m-line); padding-bottom: 5px; }
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .rail { position: static; max-height: none; flex-direction: row; overflow-x: auto; gap: 14px; padding-bottom: 6px; }
+  .phase { flex: none; }
+  .phase-name { white-space: nowrap; }
+  .phase .steps { display: flex; gap: 4px; }
+  .step-btn { grid-template-columns: 26px; padding: 6px; }
+  .step-btn .t { display: none; }
+  .details { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .m-app { grid-template-columns: 1fr; }
+  .m-nav { display: none; }
+  .m-wiz-body { grid-template-columns: 1fr; }
+  .m-tree { display: none; }
+  .m-grid2 { grid-template-columns: 1fr; }
+  .m-stats b { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor { transition: none; }
+  .cursor.click .ring { animation: none; }
+  .progress i { transition: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="top-text">
+      <span class="eyebrow">ChatGPT Ads Manager · Beta · October 2026</span>
+      <h1>Publish your first ad on ChatGPT</h1>
+      <p class="lede">Seventeen steps, from creating the Ads Manager account to a published campaign. The green steps follow your screen recording. The amber steps cover the setup that happened before the recording started, taken from OpenAI's help centre and setup guides.</p>
+    </div>
+    <div class="legend">
+      <span class="src rec">From your recording</span>
+      <span class="src web">Added from docs</span>
+    </div>
+  </header>
+
+  <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Steps"></nav>
+
+    <section class="stage-col" aria-live="polite">
+      <div class="step-head">
+        <div class="meta"><span>Step <b id="num">1</b> of <b id="total">17</b></span><span id="phase"></span><span id="src"></span></div>
+        <h2 id="title"></h2>
+      </div>
+
+      <div class="stage" id="stage">
+        <div id="mock"></div>
+        <div class="cursor" id="cursor" aria-hidden="true">
+          <span class="ring"></span>
+          <svg width="22" height="22" viewBox="0 0 22 22"><path d="M3 2 L3 18 L7.5 14 L10.5 20.5 L13 19.4 L10.1 13 L16 13 Z" fill="var(--cursor)" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <div class="details">
+        <div class="card"><h3>Do this</h3><ol id="todo"></ol></div>
+        <div class="card tip"><h3>Watch out</h3><p id="tip"></p></div>
+      </div>
+
+      <div class="controls">
+        <div class="grp">
+          <button class="btn" id="prev" type="button">← Back</button>
+          <button class="btn primary" id="next" type="button">Next →</button>
+        </div>
+        <div class="grp" style="align-items:center">
+          <span class="hint">Arrow keys work too</span>
+          <button class="btn" id="play" type="button" aria-pressed="false">▶ Autoplay</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <span>Screens are recreations of Ads Manager as it appeared in the recording on 28 Oct 2026. Tax IDs, addresses, pixel IDs and emails are placeholders. Ads Manager is in beta, so labels can change.</span>
+    <span>Sources for the added steps:</span>
+    <ul>
+      <li><a href="https://openai.com/index/new-ways-to-buy-chatgpt-ads/" target="_blank" rel="noopener">OpenAI: New ways to buy ChatGPT ads</a></li>
+      <li><a href="https://help.openai.com/en/articles/20001213-ads-manager-beta-account-setup" target="_blank" rel="noopener">OpenAI Help: Ads Manager beta account setup</a></li>
+      <li><a href="https://help.openai.com/en/articles/20001216-billing-payment" target="_blank" rel="noopener">OpenAI Help: Billing and payment</a></li>
+      <li><a href="https://help.openai.com/en/articles/20001220-frequently-asked-questions" target="_blank" rel="noopener">OpenAI Help: Frequently asked questions</a></li>
+      <li><a href="https://www.spendlessgrowmore.com/learn/chatgpt-ads-manager" target="_blank" rel="noopener">Spend Less Grow More: How to sign up and set up ChatGPT ads</a></li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+(function () {
+  // ---- mock helpers ----
+  const T = ' data-target';
+  const win = (path, body) => `<div class="m-win"><div class="m-bar"><span class="m-dots"><i></i><i></i><i></i></span><span class="m-url">ads.openai.com/${path}</span></div><div class="m-body">${body}</div></div>`;
+  const NAV = ['Overview', 'Campaigns', 'Conversions', 'Tools', 'Billing', 'Settings'];
+  const app = (active, main, subs) => `<div class="m-app"><aside class="m-nav"><div class="m-brand">Ads Manager<em>Beta</em></div>${NAV.map(n => `<div class="m-navi ${n === active && !subs ? 'on' : ''}">${n}</div>${n === active && subs ? subs.map(s => `<div class="m-navi sub ${s.on ? 'on' : ''}">${s.t}</div>`).join('') : ''}`).join('')}</aside><div class="m-main">${main}</div></div>`;
+  const f = (label, val, o = {}) => `<div class="m-field">${label ? `<label>${label}</label>` : ''}<div class="m-input ${o.ph ? 'ph' : ''} ${o.sel ? 'sel' : ''} ${o.focus ? 'focus' : ''} ${o.fill ? 'fill' : ''} ${o.err ? 'err' : ''}"${o.t ? T : ''}><span>${val}</span>${o.count ? `<span class="m-count ${o.over ? 'over' : ''}">${o.count}</span>` : ''}</div>${o.help ? `<div class="m-help ${o.warn ? 'warn' : ''}">${o.help}</div>` : ''}</div>`;
+  const b = (t, cls = '', tg) => `<span class="m-btn ${cls}"${tg ? T : ''}>${t}</span>`;
+  const scrim = (inner) => `<div class="m-scrim">${inner}</div>`;
+  const wiz = (tree, form, foot) => `<div class="m-wiz"><div class="m-wiz-head"><span>New campaign</span><span style="display:flex;gap:10px;align-items:center">${b('Save as draft', 'ghost')}<span>✕</span></span></div><div class="m-wiz-body"><div class="m-tree">${tree}</div><div class="m-form">${form}</div></div><div class="m-foot">${foot}</div></div>`;
+  const tree = (stage, name, ag, ad) => {
+    const s = (i, t) => `<div class="s ${i < stage ? 'done' : i === stage ? 'on' : ''}"><i>${i < stage ? '✓' : i}</i>${t}</div>`;
+    let h = s(1, 'Create Campaign') + `<div class="c ${stage === 1 ? 'on' : ''}">${name}</div>` + s(2, 'Create Ad Group &amp; Ads');
+    if (stage >= 2) h += `<div class="c ${ag === 'on' ? 'on' : ''}">${ag === 'on' ? 'Untitled ad group' : 'fao test campaign'}</div><div class="c l2">All Ads</div>${ad ? `<div class="c l3 ${ad === 'on' ? 'on' : ''}">${ad === 'on' ? 'Untitled ad' : 'test'}</div>` : ''}<div class="c l3 add">+ New Ad</div><div class="c add">+ New Ad Group</div>`;
+    h += s(3, 'Review');
+    if (stage >= 3) h += `<div class="c on">Campaign summary</div>`;
+    return h;
+  };
+
+  const STEPS = [
+    // ---------- Before you start ----------
+    {
+      phase: 'Before you start', src: 'web', title: 'Check that your business is eligible',
+      mock: win('', `<div class="m-center"><div class="m-card"><h4>Have these ready</h4><p>Ads Manager is self-serve for businesses advertising on their own behalf.</p><ul class="m-list">
+        <li>A registered legal entity in a country where self-serve is available (India is supported)</li>
+        <li>An allowed ad category. Education, retail and services are fine; some categories are restricted.</li>
+        <li>Your business website, live on HTTPS</li>
+        <li>Your tax ID. For India: PAN, GSTIN or CIN</li>
+        <li>A business credit card issued in the same country as the entity</li>
+        <li>A square logo and ad images, at least 256 × 256 px</li></ul>${b('I have everything', 'wide', 1)}</div></div>`),
+      todo: ['Confirm your company is registered in a supported country and its category is allowed.', 'Keep the GST certificate or PAN card open so you can copy the tax ID exactly.', 'Agencies: you can\'t create an account for a client. Ask the client to create it and invite you as a Member or Admin.'],
+      tip: 'In the recording the GSTIN had to be dug out of a WhatsApp chat mid-form. Have it ready before you start so the verification session doesn\'t time out.'
+    },
+    {
+      phase: 'Before you start', src: 'web', title: 'Sign up at ads.openai.com',
+      mock: win('auth/signup', `<div class="m-center"><div class="m-card"><h4>Create your Ads Manager account</h4><p>Use your OpenAI account. A work email is best, because it becomes the account owner.</p>${f('Email', 'you@yourcompany.com', { focus: 1 })}${b('Continue with OpenAI account', 'wide', 1)}<span class="m-fine">Already advertising? <span class="m-link">Log in</span></span></div></div>`),
+      todo: ['Open <code>ads.openai.com</code> and choose Sign up.', 'Sign in with the OpenAI account you use for ChatGPT, preferably on your work email.', 'If your country isn\'t open yet, you can still create the account and OpenAI will notify you.'],
+      tip: 'Your ChatGPT workspace or API admin role doesn\'t carry over. Ads Manager permissions are granted separately, inside Ads Manager.'
+    },
+    {
+      phase: 'Before you start', src: 'web', title: 'Let Ads Manager draft a campaign from your website',
+      mock: win('onboarding', `<div class="m-center"><div class="m-card"><h4>Start from your website</h4><p>We'll read your site and draft a campaign and ad for you to review. You can change everything.</p>${f('Website', 'https://www.faossb.com/', {})}${b('Generate draft', 'wide', 1)}<span class="m-link" style="text-align:center">Skip for now</span></div></div>`),
+      todo: ['Enter your website URL, or choose Skip.', 'Ads Manager uses it to pre-fill a campaign marked <b>AI generated</b> and to suggest ads later.'],
+      tip: 'This is optional. The recording shows an AI-generated draft named after the company; you can keep it, edit it, or choose Create from scratch.'
+    },
+    {
+      phase: 'Before you start', src: 'web', title: 'Enter advertiser details, country and currency',
+      mock: win('onboarding/advertiser', `<div class="m-center"><div class="m-card"><h4>Advertiser details</h4><div class="m-grid2">${f('Account name', 'FAO Ads')}${f('Brand name', 'Future Officers Academy', { help: 'Shown on your ads' })}</div>${f('Legal name', 'Your registered company name', { help: 'Must match your tax documents' })}<div class="m-grid2">${f('Country', 'India', { sel: 1, fill: 1 })}${f('Currency', 'INR (₹)', { sel: 1, fill: 1 })}</div>${f('Time zone', '(GMT+5:30) Asia/Kolkata', { sel: 1, fill: 1, help: 'Country, currency and time zone can\'t be changed later' })}${b('Create account', 'wide', 1)}</div></div>`),
+      todo: ['Account name is an internal label. Brand name is what people see on the ad.', 'Legal name must match your PAN or GST registration exactly.', 'Pick the country of the entity that will be billed, then currency and time zone.'],
+      tip: 'Country, currency and time zone are locked once the account is created. Getting them wrong means opening a new advertiser account.'
+    },
+
+    // ---------- Verify the business ----------
+    {
+      phase: 'Verify your business', src: 'rec', title: 'Start business verification',
+      mock: win('settings/users', app('Settings', `<div class="m-title">Users</div>`) + scrim(`<div class="m-modal"><h4>Verify your business to start running ads.</h4>
+        <div class="m-feature"><i>📣</i><div><b>Start running ads after verification</b><span>Launch campaigns and reach customers across ChatGPT.</span></div></div>
+        <div class="m-feature"><i>↗</i><div><b>Quick and easy</b><span>Complete verification in a few minutes with basic business information.</span></div></div>
+        <div class="m-feature"><i>🛡</i><div><b>Secure review</b><span>Your verification is handled securely through Persona.</span></div></div>
+        ${b('Begin Verifying', 'wide', 1)}<span class="m-fine">Secured with Persona</span></div>`)),
+      todo: ['Click the verification banner at the top right of Ads Manager.', 'Read the summary and click <b>Begin Verifying</b>.', 'OpenAI shares your account details with Persona, its verification vendor, for sanctions and eligibility checks.'],
+      tip: 'Beside the form there\'s a "Don\'t have an EIN or TIN?" panel with Switch to individual. Only use it if you advertise under your own name, and note that switching may reset what you\'ve typed.'
+    },
+    {
+      phase: 'Verify your business', src: 'rec', title: 'Fill in business details',
+      mock: win('settings/users', app('Settings', '') + scrim(`<div class="m-modal"><h4>Business Details</h4>
+        ${f('Business tax identification number', '22AAAAA0000A1Z5', { focus: 1, help: 'Enter your PAN, GSTIN, or CIN above' })}
+        ${f('Business Website', 'https://www.faossb.com/', { fill: 1 })}
+        ${f('Business Industry', 'Education', { fill: 1 })}
+        ${f('Physical address (no PO boxes)', 'Start typing to autocomplete address…', { ph: 1 })}
+        <span class="m-link">– or edit address manually</span>
+        <span class="m-check"><i></i>Legal registered address same as physical address</span>
+        ${b('Continue', 'wide', 1)}</div>`)),
+      todo: ['Paste your GSTIN (or PAN / CIN) into <b>Business tax identification number</b>.', 'Website and industry come pre-filled from onboarding. Check them.', 'Type the office address, then fix house number, PIN code, city and state in the manual fields.', 'Leave <b>Same as physical address</b> ticked if the registered address matches, then <b>Continue</b>.'],
+      tip: 'Browser autofill offers several similar addresses. Pick the one that matches your GST certificate word for word, or verification can fail.'
+    },
+    {
+      phase: 'Verify your business', src: 'web', title: 'Wait for the verification review',
+      mock: win('overview', app('Overview', `<div class="m-banner"><span><b>Business verification in review</b><br><span style="color:var(--m-muted)">You can build campaigns now. Ads start after approval.</span></span>${b('View status', 'ghost', 1)}</div><div class="m-title">Tasks</div><div class="m-panel"><b>Set up billing</b><span style="color:var(--m-muted)">Add a billing profile and payment method.</span></div>`)),
+      todo: ['Finish the Persona questions and submit.', 'Review takes up to 7 business days. You can keep building campaigns meanwhile.', 'Account verification, account approval and ad review are separate checks.'],
+      tip: 'Changing the brand name or legal name later starts a new review, so settle them before you submit.'
+    },
+
+    // ---------- Billing and team ----------
+    {
+      phase: 'Billing and team', src: 'web', title: 'Add a billing profile and payment method',
+      mock: win('billing', app('Billing', `<div class="m-title">Billing</div><div class="m-panel"><b>Billing profile</b><div class="m-grid2">${f('Business name', 'Your registered company name')}${f('Invoice email', 'accounts@yourcompany.com')}</div>${f('Billing address', 'Registered office address')}</div><div class="m-panel"><b>Payment method</b>${f('Card', 'Business credit card  •••• ••••', { ph: 1 })}<div class="m-row"><span class="m-help">A temporary authorisation hold may be placed to verify the card.</span>${b('Save payment method', '', 1)}</div></div>`)),
+      todo: ['Open <b>Billing</b> and create a billing profile: business name, invoice email, billing address.', 'Add a credit card issued in the same country as the business.', 'Billing is post-pay. You\'re charged when spend reaches a threshold and at month end, plus taxes.'],
+      tip: 'Campaigns can\'t deliver until billing is complete, and a failed payment marks campaigns Not serving.'
+    },
+    {
+      phase: 'Billing and team', src: 'rec', title: 'Invite your team',
+      mock: win('settings/users', app('Settings', `<div class="m-row"><span class="m-title">Users</span>${b('+ Invite', '', 1)}</div><div class="m-stats"><div><b>2</b><span>Total users</span></div><div><b>2</b><span>Admin users</span></div><div><b>0</b><span>Users invited</span></div></div><div style="overflow-x:auto"><table class="m-table"><tr><th>User</th><th>Role</th><th>Added on</th></tr><tr><td>You<br><span style="color:var(--m-muted)">you@yourcompany.com</span></td><td>Admin ⌄</td><td>Unknown</td></tr><tr><td>Teammate<br><span style="color:var(--m-muted)">teammate@agency.com</span></td><td>Admin ⌄</td><td>Oct 28, 2026</td></tr></table></div>`, [{ t: 'General' }, { t: 'Users', on: 1 }, { t: 'Connected Apps' }])),
+      todo: ['Go to <b>Settings → Users</b> and click <b>Invite</b>.', 'Choose a role: <b>Admin</b> (everything), <b>Member</b> (create and manage campaigns) or <b>Viewer</b> (read only).', 'Upload your business logo under <b>Settings → General</b>.'],
+      tip: 'Give agency staff Member access unless they need to change billing or users.'
+    },
+
+    // ---------- Conversion tracking ----------
+    {
+      phase: 'Conversion tracking', src: 'rec', title: 'Create a data source (the pixel)',
+      mock: win('settings/conversions', app('Conversions', `<div class="m-row"><span class="m-title">Conversions</span>${b('+ Create ⌄')}</div>`) + scrim(`<div class="m-modal"><h4>Create new data source</h4>${f('Data Source Name', 'My first pixel', { focus: 1 })}<span class="m-help">Automatic advanced matching detects supported customer information on your website and hashes it in the browser. No extra pixel changes needed.</span><span class="m-fine">By clicking Create you agree to the Conversion Terms.</span><div class="m-row" style="justify-content:flex-end">${b('Cancel', 'ghost')}${b('Create', '', 1)}</div></div>`)),
+      todo: ['Open <b>Conversions</b>, then <b>Create → Data source</b>.', 'Name it (the recording used <i>My first pixel</i>).', 'Click <b>Create</b>. This accepts the Conversion Terms.'],
+      tip: 'Do this before the campaign. With no conversion event, the Conversions objective shows "No conversion events available" and you\'re stuck on Clicks.'
+    },
+    {
+      phase: 'Conversion tracking', src: 'rec', title: 'Install the pixel on your website',
+      mock: win('settings/conversions', app('Conversions', '') + scrim(`<div class="m-modal"><h4>Set up your data source</h4>${f('Pixel ID', '<span style="font-family:var(--mono)">px_XXXXXXXXXXXXXXXX</span>   ⧉', { fill: 1 })}<div class="m-field"><label>Setup code</label><span class="m-help">Install this script in your website's HTML head, near the top. One Pixel script per page.</span><div class="m-code"><b>&lt;script&gt;</b>!function(w,d,s,u){if(w.oaiq)return;var q=function(){…}}(…)<b>&lt;/script&gt;</b></div></div><div class="m-row" style="justify-content:flex-end">${b('View event stream', 'ghost')}${b('Next: create conversion event', '', 1)}</div><div class="m-steps4"><div><span>1. Create a data source</span><span>✓</span></div><div><span>2. Create a conversion event</span><span>›</span></div><div><span>3. Implement and log the event</span><span>›</span></div><div><span>4. Link event to a campaign</span><span>›</span></div></div></div>`)),
+      todo: ['Copy the setup code and paste it into the <code>&lt;head&gt;</code> of every page on your site.', 'Click <b>Next: create conversion event</b> and define the action you care about (sign-up, purchase, lead).', 'Fire a test event and confirm it shows in <b>View event stream</b>.'],
+      tip: 'In the recording the pixel was created but the event wasn\'t, so the Overview still showed "Finish setting up conversions". Finish all four steps before running a Conversions campaign.'
+    },
+
+    // ---------- Build the campaign ----------
+    {
+      phase: 'Build the campaign', src: 'rec', title: 'Name the campaign and pick an objective',
+      mock: win('overview', wiz(tree(1, 'FAO Test Campaign'), `${f('Campaign name', 'FAO Test Campaign', { focus: 1 })}${f('Objective', 'Clicks', { sel: 1, t: 1, help: 'Your objective sets how you bid in the auction and which ad formats you can use.' })}${f('Conversion event', 'No conversion events available', { ph: 1, sel: 1, help: 'Only needed for the Conversions objective. Set up conversions first.' })}`, `<span></span><span class="r">${b('Next: Ad group')}</span>`)),
+      todo: ['Click <b>+ Create → Campaign</b> on the Overview page.', 'Give it a clear name, for example <i>FAO Test Campaign</i>.', 'Choose an objective: <b>Clicks</b> for traffic, or <b>Conversions</b> if your pixel event is live.'],
+      tip: 'Objective and billing option can\'t be changed after the campaign is created. Pick Conversions only if an event already exists.'
+    },
+    {
+      phase: 'Build the campaign', src: 'rec', title: 'Set locations, platforms and daily budget',
+      mock: win('overview', wiz(tree(1, 'FAO Test Campaign'), `${f('Locations for this campaign', 'Enter a location to include', { ph: 1 })}<span class="m-chip">India ✕</span>${f('Eligible platforms', 'All platforms', { sel: 1, help: 'Android app, Android web, Desktop web, iOS app, iOS web' })}<div class="m-field"><label>Daily budget</label><div class="m-input"><span>₹ 3000.00</span><span class="m-count">INR</span></div><span class="m-help">Max daily spend ₹6,000.00 · max seven-day spend ₹21,000.00</span></div><div class="m-field"><label>Creative enhancement ✦</label><span class="m-toggle"><i></i>On</span><span class="m-help">AI generates personalised and translated versions of your headlines and descriptions, which may be shown without your review.</span></div>`, `<span></span><span class="r">${b('Next: Ad group', '', 1)}</span>`)),
+      todo: ['Add the countries to target (India) and any to exclude.', 'Leave <b>All platforms</b> unless you only want app or desktop traffic.', 'Set the <b>daily budget</b>. The recording used ₹3,000.', 'Decide on <b>Creative enhancement</b>, then click <b>Next: Ad group</b>.'],
+      tip: 'Budgets average over a Sunday–Saturday week, so a single day can spend up to 2× the daily budget. Turn Creative enhancement off if every headline needs approval first.'
+    },
+    {
+      phase: 'Build the campaign', src: 'rec', title: 'Set up the ad group',
+      mock: win('overview', wiz(tree(2, 'FAO Test Campaign', 'on'), `${f('Ad group name', 'fao test campaign', { focus: 1 })}<div class="m-field"><label>Bid strategy</label><span class="m-help">Choose how to bid for clicks in this ad group.</span><span style="font-weight:600">↗ Autobid</span></div>${f('Tracking parameters', 'campaign_id={campaign_id}&amp;ad_id={ad_id}', { ph: 1, help: 'Optional. Placeholders: {campaign_id}, {ad_group_id}, {ad_id}, {ad_account_id}, {oppref}' })}${f('Default Ad Destination URL', 'https://www.faossb.com/', {})}${f('Context hints (optional)', 'SSB interview preparation, NDA and CDS coaching, joining the Indian Army as an officer', { help: 'Topics where your offer is relevant. They guide matching; they aren\'t exact-match keywords.' })}`, `${b('Back', 'ghost')}<span class="r">${b('Next: All Ads', '', 1)}</span>`)),
+      todo: ['Name the ad group. A red outline means the name is still empty.', 'Keep <b>Autobid</b>.', 'Optionally add UTM-style tracking parameters.', 'Paste the landing page into <b>Default Ad Destination URL</b>.', 'Add <b>context hints</b>: the conversations where your ad belongs.'],
+      tip: 'The recording left context hints empty. Filling them in is the main targeting lever ChatGPT ads have, so write a sentence or two about the questions your customers ask.'
+    },
+    {
+      phase: 'Build the campaign', src: 'rec', title: 'Create the ad',
+      mock: win('overview', wiz(tree(2, 'FAO Test Campaign', 'done', 'on'), `${f('Ad name', 'test', { focus: 1 })}${f('Ad Destination URL', 'https://www.faossb.com/   ↗')}<div class="m-field"><label>Ad format</label><div style="display:flex;gap:16px"><span class="m-radio on"><i></i>Single image</span><span class="m-radio"><i></i>Multiple images</span></div></div>${f('Title', 'Best SSB Coaching in India', { count: '27/32' })}${f('Description', 'Join the Indian Defence and become an Officer.', { count: '46/54' })}<div class="m-field"><label>Ad images</label><span class="m-help">PNG or JPG. Square, at least 256 × 256 px.</span><div class="m-thumb"></div></div>`, `${b('Back', 'ghost')}<span class="r">${b('Add another Ad ⌄', 'ghost')}${b('Next: Review', '', 1)}</span>`)),
+      todo: ['On <b>All Ads</b>, add one of the AI-suggested ads with <b>+</b>, or click <b>Skip &amp; Continue</b> to write your own.', 'Name the ad and confirm the destination URL.', 'Write a <b>title</b> (32 characters) and <b>description</b> (54 characters).', 'Upload a square image, then click <b>Next: Review</b>.'],
+      tip: 'The first title tried was 49/32 and showed "Copy may be truncated in some placements". Keep the title under 32 characters.'
+    },
+
+    // ---------- Publish ----------
+    {
+      phase: 'Review and publish', src: 'rec', title: 'Review the summary and publish',
+      mock: win('overview', wiz(tree(3, 'FAO Test Campaign', 'done', 'done'), `<div class="m-title">Campaign summary</div><div class="m-panel"><div class="m-grid2"><div class="m-kv"><span>Campaign name</span>FAO Test Campaign</div><div class="m-kv"><span>Objective</span>Clicks</div><div class="m-kv"><span>Locations</span>India</div><div class="m-kv"><span>Eligible platforms</span>Android app, Android web, Desktop web, iOS app, iOS web</div><div class="m-kv"><span>Average daily budget</span>₹3,000.00</div><div class="m-kv"><span>Bid strategy</span>Autobid</div></div></div><div class="m-panel"><div class="m-row"><b>1 ad</b><span>✎</span></div><div style="display:flex;gap:10px;align-items:center"><div class="m-thumb"></div><div><b>Best SSB Coaching in India</b><br><span style="color:var(--m-muted)">Join the Indian Defence and become an Officer.</span></div></div></div>`, `${b('Back', 'ghost')}<span class="r"><span class="m-fine">By clicking "Publish", you agree to the Advertising Tool Terms.</span>${b('Publish', '', 1)}</span>`)),
+      todo: ['Check every card on <b>Campaign summary</b>. Use the pencil icons to fix anything.', 'Click <b>Publish</b>. This accepts the Advertising Tool Terms.', 'Wait while it shows <i>Applying changes · Creating ad groups</i>.'],
+      tip: 'Use Save as draft at the top right if you aren\'t ready. Drafts appear under Campaigns and can be published later.'
+    },
+    {
+      phase: 'Review and publish', src: 'rec', title: 'Confirm what was created and switch it on',
+      mock: win('settings/change-history', app('Tools', `<div class="m-title">Change History</div><div style="overflow-x:auto"><table class="m-table"><tr><th>Activity</th><th>Item</th><th>Details</th></tr><tr><td>Ad created</td><td>test</td><td>STATUS None → <span class="m-pill"${T}>Paused</span></td></tr><tr><td>Ad group created</td><td>fao test campaign</td><td>STATUS None → <span class="m-pill">Paused</span></td></tr><tr><td>Client data source created</td><td>My first pixel</td><td>CLIENT TYPE None → web</td></tr></table></div><div class="m-toast"><i>✓</i>Campaign saved as draft.</div>`, [{ t: 'Feeds' }, { t: 'Change History', on: 1 }, { t: 'Audiences' }])),
+      todo: ['Open <b>Tools → Change History</b> to see the ad, ad group and pixel that were created.', 'New items start as <b>Paused</b>. In <b>Campaigns</b>, switch the campaign, ad group and ad on.', 'Ads deliver once verification is approved, billing is set up and the ad passes review.', 'Give it 24 hours before treating zero impressions as a problem.'],
+      tip: 'In the recording the publish ended with "Campaign saved as draft" because verification and billing weren\'t finished. Editing the ad\'s creative later sends it back to review.'
+    }
+  ];
+
+  // ---- render ----
+  const $ = (id) => document.getElementById(id);
+  const rail = $('rail'), mock = $('mock'), cursor = $('cursor'), stage = $('stage');
+  $('total').textContent = STEPS.length;
+
+  const phases = [];
+  STEPS.forEach((s, i) => {
+    let p = phases.find(x => x.name === s.phase);
+    if (!p) { p = { name: s.phase, items: [] }; phases.push(p); }
+    p.items.push(i);
+  });
+  rail.innerHTML = phases.map(p => `<div class="phase"><div class="phase-name">${p.name}</div><div class="steps">${p.items.map(i => `<button type="button" class="step-btn ${STEPS[i].src}" data-i="${i}" aria-label="Step ${i + 1}: ${STEPS[i].title.replace(/"/g, '')}"><span class="n">${i + 1}</span><span class="t">${STEPS[i].title}</span></button>`).join('')}</div></div>`).join('');
+  const btns = [...rail.querySelectorAll('.step-btn')];
+
+  let cur = 0, timer = null, clickT = null;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function moveCursor() {
+    const target = mock.querySelector('[data-target]');
+    clearTimeout(clickT);
+    cursor.classList.remove('click');
+    mock.querySelectorAll('.hl').forEach(e => e.classList.remove('hl'));
+    if (!target) { cursor.style.opacity = '0'; return; }
+    cursor.style.opacity = '1';
+    const sr = stage.getBoundingClientRect(), tr = target.getBoundingClientRect();
+    const x = tr.left - sr.left + Math.min(tr.width * 0.6, tr.width - 8);
+    const y = tr.top - sr.top + tr.height * 0.55;
+    cursor.style.transform = `translate(${x}px, ${y}px)`;
+    clickT = setTimeout(() => { cursor.classList.add('click'); target.classList.add('hl'); }, reduce ? 0 : 950);
+  }
+
+  function show(i) {
+    cur = Math.max(0, Math.min(STEPS.length - 1, i));
+    const s = STEPS[cur];
+    $('num').textContent = cur + 1;
+    $('phase').textContent = s.phase;
+    $('src').innerHTML = `<span class="src ${s.src}">${s.src === 'rec' ? 'From your recording' : 'Added from docs'}</span>`;
+    $('title').textContent = s.title;
+    mock.innerHTML = s.mock;
+    $('todo').innerHTML = s.todo.map(t => `<li>${t}</li>`).join('');
+    $('tip').innerHTML = s.tip;
+    $('bar').style.width = ((cur + 1) / STEPS.length * 100) + '%';
+    btns.forEach((b, j) => { b.classList.toggle('on', j === cur); b.classList.toggle('done', j < cur); b.setAttribute('aria-current', j === cur ? 'step' : 'false'); });
+    $('prev').disabled = cur === 0;
+    $('next').textContent = cur === STEPS.length - 1 ? 'Start over ↺' : 'Next →';
+    btns[cur].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    try { history.replaceState(null, '', '#s' + (cur + 1)); } catch (e) {}
+    requestAnimationFrame(moveCursor);
+  }
+
+  function stopPlay() { clearInterval(timer); timer = null; $('play').textContent = '▶ Autoplay'; $('play').setAttribute('aria-pressed', 'false'); }
+  $('play').addEventListener('click', () => {
+    if (timer) return stopPlay();
+    $('play').textContent = '❚❚ Pause'; $('play').setAttribute('aria-pressed', 'true');
+    timer = setInterval(() => { if (cur >= STEPS.length - 1) { stopPlay(); return; } show(cur + 1); }, 6500);
+  });
+  $('prev').addEventListener('click', () => { stopPlay(); show(cur - 1); });
+  $('next').addEventListener('click', () => { stopPlay(); show(cur === STEPS.length - 1 ? 0 : cur + 1); });
+  btns.forEach(b => b.addEventListener('click', () => { stopPlay(); show(+b.dataset.i); }));
+  document.addEventListener('keydown', (e) => {
+    if (e.target.closest('input, textarea')) return;
+    if (e.key === 'ArrowRight') { stopPlay(); show(cur + 1); }
+    if (e.key === 'ArrowLeft') { stopPlay(); show(cur - 1); }
+  });
+  window.addEventListener('resize', () => requestAnimationFrame(moveCursor));
+
+  const m = /^#s(\d+)$/.exec(location.hash || '');
+  show(m ? +m[1] - 1 : 0);
+})();
+</script>
+</body>
+</html>

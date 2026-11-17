@@ -5,7 +5,9 @@
     brand, colour, product, domain  -> ad card, microsite, product pack, notification
     pack                            -> drawn SVG pack shape: "tub" | "bag" | "pouch" | "bottle"
     glyph                           -> favicon shape: "leaf" | "paw" | "fish" | "drop"
-    image                           -> optional path to a real pack shot in assets/ (replaces the drawn pack)
+    image, imageBg                  -> optional real pack shot in assets/ (replaces the drawn pack) and its background colour
+    favicon                         -> optional real site icon for the ad's advertiser row (replaces the glyph)
+    logo, logoHeight, headerLight   -> optional real logo for the microsite header; headerLight = white header for a dark logo
     query, answer                   -> what she asks and what the AI says (keep it brand-neutral)
     headline (max 32), description (max 54): Ads Manager's limits (walkthrough step 15).
                                       The ad has no button, so put the free offer in the headline.

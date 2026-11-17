@@ -7,7 +7,8 @@
     glyph                           -> favicon shape: "leaf" | "paw" | "fish" | "drop"
     image                           -> optional path to a real pack shot in assets/ (replaces the drawn pack)
     query, answer                   -> what she asks and what the AI says (keep it brand-neutral)
-    headline (max 40), description (max 150)
+    headline (max 32), description (max 54): Ads Manager's limits (walkthrough step 15).
+                                      The ad has no button, so put the free offer in the headline.
     questions                       -> 3 qualifying questions, options, and which option gets tapped
 
   Copy rules: no em dashes, no medical wording, nothing that targets under-18s.
@@ -55,8 +56,7 @@ window.DEMO = {
         "**Meals:** three to four small portions a day, as per the pack's chart.",
         "**Changes:** switch foods slowly over a week, with fresh water always out."
       ] }
-    ],
-    cta: "Get a free sample"
+    ]
   },
 
   // Slide 3 tab order
@@ -68,8 +68,8 @@ window.DEMO = {
       brand: "GlowLeaf", colour: "#2E8B6E", product: "Gel Moisturiser",
       domain: "sample.glowleaf.in", pack: "tub", glyph: "leaf",
       query: "best moisturiser for oily skin in Mumbai humidity",
-      headline: "Try GlowLeaf Gel Moisturiser free",
-      description: "Lightweight, non-sticky hydration for humid days. Answer 3 quick questions and get a free sample delivered home.",
+      headline: "Free GlowLeaf moisturiser sample",
+      description: "Non-sticky hydration for humid days, delivered free.",
       answer: [
         { p: "In Mumbai's humidity, oily skin usually does best with a light, water-based layer rather than a rich cream." },
         { li: [
@@ -92,8 +92,8 @@ window.DEMO = {
       brand: "Tailwell", colour: "#C8102E", product: "Puppy Starter Kit",
       domain: "sample.tailwell.in", pack: "bag", glyph: "paw",
       query: "what should I feed my 3 month old lab puppy",
-      headline: "Try Tailwell Puppy Starter Kit free",
-      description: "Complete nutrition sized for growing large-breed pups. Answer 3 quick questions and get a free starter kit delivered home.",
+      headline: "Free Tailwell puppy starter kit",
+      description: "Complete nutrition for growing large-breed pups.",
       answer: [
         { p: "At 3 months, a Labrador is growing fast, so the goal is steady, balanced growth rather than quick weight gain." },
         { li: [
@@ -116,8 +116,8 @@ window.DEMO = {
       brand: "Purrfect Bowl", colour: "#6B2C91", product: "Wet Food Trial Pack",
       domain: "sample.purrfectbowl.in", pack: "pouch", glyph: "fish",
       query: "my cat ignores dry food, what should I try",
-      headline: "Try Purrfect Bowl wet food free",
-      description: "Tender chunks in gravy, made for fussy eaters. Answer 3 quick questions and get a free trial pack delivered home.",
+      headline: "Free wet food for fussy cats",
+      description: "Tender chunks in gravy. A free trial pack, delivered.",
       answer: [
         { p: "Plenty of cats lose interest in dry food, especially fussy eaters. A few changes usually help." },
         { li: [
@@ -140,8 +140,8 @@ window.DEMO = {
       brand: "Silkroot", colour: "#B5651D", product: "Anti-Frizz Serum",
       domain: "sample.silkroot.in", pack: "bottle", glyph: "drop",
       query: "serum for frizzy hair after monsoon",
-      headline: "Try Silkroot Anti-Frizz Serum free",
-      description: "A light serum that smooths monsoon frizz without the grease. Answer 3 quick questions and get a free sample delivered home.",
+      headline: "Free anti-frizz serum sample",
+      description: "Smooths monsoon frizz without the grease.",
       answer: [
         { p: "Monsoon humidity lifts the outer layer of the hair, which is what makes it frizz. A light serum helps seal it back down." },
         { li: [

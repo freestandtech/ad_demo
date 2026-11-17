@@ -141,45 +141,45 @@ svg{display:block}
 .acts{display:flex;color:#8e8e8e;opacity:0;transition:opacity .4s}
 .acts.show,.acts.in{opacity:1}
 
-/* Sponsored ad unit */
-.ad{font-family:var(--sys);background:#fff;border:1px solid #E4E4E7;color:#0d0d0d;position:relative}
+/* Ad unit in the ChatGPT ads format: image flush left, advertiser row with a grey "Ad" label and a menu,
+   headline, two-line description. No button: the whole card is the link. */
+.ad{display:flex;align-items:stretch;font-family:var(--sys);background:#fff;border:1px solid #E3E3E3;color:#0d0d0d;overflow:hidden;position:relative;transition:transform .15s,box-shadow .5s var(--ease)}
+.ad.pressed{transform:scale(.98)}
+.ad-img{flex:none;background:linear-gradient(155deg,#fbfbfb 0%,var(--bt) 100%);display:grid;place-items:center;overflow:hidden;border-right:1px solid #EFEFEF}
+.ad-img svg{width:92%;height:92%}
+.ad-img img{width:100%;height:100%;object-fit:cover}
+.ad-txt{flex:1;min-width:0;display:flex;flex-direction:column}
 .ad-top{display:flex;align-items:center}
-.ad-fav{display:grid;place-items:center;background:var(--bc);color:#fff;flex:none}
-.ad-fav svg{width:60%;height:60%}
-.ad-who{display:flex;flex-direction:column;min-width:0;line-height:1.2}
-.ad-name{font-weight:600}
-.ad-dom{color:#6b6b6b}
-.ad-spon{margin-left:auto;background:#FCEFD9;color:#7F5210;font-weight:600;border-radius:999px;letter-spacing:.01em;flex:none}
-.ad-mid{display:flex;align-items:flex-start}
-.ad-img{flex:none;background:var(--bt);display:grid;place-items:center;overflow:hidden}
-.ad-img svg,.ad-img img{width:100%;height:100%;object-fit:cover}
-.ad-txt{min-width:0}
-.ad-hl{font-weight:650;letter-spacing:-.005em}
-.ad-ds{color:#5d5d5d}
-.ad-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--amber);color:var(--ink);font-weight:650;border-radius:999px;transition:transform .15s}
-.ad-btn.pressed{transform:scale(.96)}
-.ad-lg{border-radius:20px;padding:16px 20px 18px}
-.ad-lg .ad-top{gap:12px}
-.ad-lg .ad-fav{width:34px;height:34px;border-radius:9px}
-.ad-lg .ad-name{font-size:16.5px}
-.ad-lg .ad-dom{font-size:14px}
-.ad-lg .ad-spon{font-size:13.5px;padding:5px 12px}
-.ad-lg .ad-mid{margin-top:14px;gap:18px}
-.ad-lg .ad-img{width:124px;height:124px;border-radius:14px}
-.ad-lg .ad-hl{font-size:20px;line-height:1.3}
-.ad-lg .ad-ds{font-size:16px;line-height:1.45;margin-top:5px}
-.ad-lg .ad-btn{margin-top:12px;font-size:16px;padding:10px 20px}
-.ad-sm{border-radius:16px;padding:12px 12px 12px}
-.ad-sm .ad-top{gap:8px}
-.ad-sm .ad-fav{width:26px;height:26px;border-radius:7px}
-.ad-sm .ad-name{font-size:13px}
-.ad-sm .ad-dom{font-size:11px}
-.ad-sm .ad-spon{font-size:10.5px;padding:3px 8px}
-.ad-sm .ad-mid{margin-top:10px;gap:11px}
-.ad-sm .ad-img{width:84px;height:84px;border-radius:11px}
-.ad-sm .ad-hl{font-size:14.5px;line-height:1.28}
-.ad-sm .ad-ds{font-size:12px;line-height:1.4;margin-top:4px}
-.ad-sm .ad-btn{display:flex;width:100%;height:40px;margin-top:11px;font-size:14px}
+.ad-fav{display:grid;place-items:center;border-radius:50%;background:var(--bc);color:#fff;flex:none}
+.ad-fav svg{width:62%;height:62%}
+.ad-name{font-weight:500;color:#1f1f1f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ad-tag{flex:none;background:#F0F0F0;color:#7c7c7c;font-weight:500;line-height:1}
+.ad-more{margin-left:auto;flex:none;color:#7c7c7c;display:grid;place-items:center}
+.ad-hl{font-weight:600;letter-spacing:-.005em;color:#0d0d0d;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ad-hl span{background-image:linear-gradient(transparent 60%,rgba(232,163,61,.55) 60%);background-repeat:no-repeat;background-size:0% 100%;transition:background-size .9s var(--ease) .15s;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.ad-ds{color:#6b6b6b;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ad-note{color:#8f8f8f}
+.ad-note b{font-weight:400;color:#5f5f5f}
+.ad-lg{border-radius:18px;min-height:150px;max-width:660px}
+.ad-lg .ad-img{width:150px}
+.ad-lg .ad-txt{padding:17px 18px 16px 20px}
+.ad-lg .ad-top{gap:8px}
+.ad-lg .ad-fav{width:21px;height:21px}
+.ad-lg .ad-name{font-size:16px}
+.ad-lg .ad-tag{font-size:13px;padding:4px 8px;border-radius:8px}
+.ad-lg .ad-more svg{width:22px;height:22px}
+.ad-lg .ad-hl{font-size:19.5px;line-height:1.3;margin-top:10px}
+.ad-lg .ad-ds{font-size:17px;line-height:1.42;margin-top:4px}
+.ad-sm{border-radius:16px;min-height:108px}
+.ad-sm .ad-img{width:108px}
+.ad-sm .ad-txt{padding:11px 11px 11px 13px}
+.ad-sm .ad-top{gap:6px}
+.ad-sm .ad-fav{width:16px;height:16px}
+.ad-sm .ad-name{font-size:12.5px}
+.ad-sm .ad-tag{font-size:10.5px;padding:3px 6px;border-radius:6px}
+.ad-sm .ad-more svg{width:17px;height:17px}
+.ad-sm .ad-hl{font-size:14.5px;line-height:1.28;margin-top:7px}
+.ad-sm .ad-ds{font-size:13px;line-height:1.38;margin-top:3px}
 
 /* =========================================================
    SLIDE 2: Be there at the moment of the question
@@ -206,7 +206,7 @@ svg{display:block}
 .win .acts svg{width:19px;height:19px}
 .adwrap{margin-top:16px;opacity:0;transform:translateY(30px);transition:opacity .55s var(--ease),transform .75s var(--ease)}
 .adwrap.show{opacity:1;transform:none}
-.divider{height:1px;background:#E6E6E6;margin:2px 0 16px}
+.divider{height:1px;background:#E6E6E6;margin:2px 0 18px}
 .win-comp{flex:none;padding:10px 0 22px}
 .comp{width:780px;margin:0 auto;height:58px;border-radius:29px;border:1px solid #E3E3E3;box-shadow:0 4px 18px rgba(0,0,0,.05);display:flex;align-items:center;gap:14px;padding:0 10px 0 20px;color:#8e8e8e;font-size:18px}
 .comp svg{width:22px;height:22px;flex:none}
@@ -216,8 +216,8 @@ svg{display:block}
 .s2 .ad{transition:box-shadow .5s var(--ease)}
 .s2.st-2:not(.st-3) .ububble{box-shadow:0 0 0 3px var(--amber)}
 .s2.st-3:not(.st-4) .ad{box-shadow:0 0 0 3px var(--amber),0 20px 40px -24px rgba(232,163,61,.6)}
-.s2.st-4 .ad-btn{animation:pulse 1.6s ease-out infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,163,61,.75)}70%{box-shadow:0 0 0 18px rgba(232,163,61,0)}100%{box-shadow:0 0 0 0 rgba(232,163,61,0)}}
+.s2.st-4 .ad-hl span{background-size:100% 100%}
+.win .ad-note{font-size:14.5px;line-height:1.45;margin-top:14px}
 .callouts{position:absolute;left:1210px;right:110px;top:282px;display:flex;flex-direction:column;gap:50px}
 .co{display:flex;gap:26px;align-items:flex-start;opacity:.2;transition:opacity .6s var(--ease)}
 .co.on{opacity:1}
@@ -266,8 +266,13 @@ svg{display:block}
 .island{position:absolute;left:50%;top:11px;width:122px;height:35px;margin-left:-61px;border-radius:20px;background:#000;z-index:46}
 .home{position:absolute;left:50%;bottom:8px;width:136px;height:5px;margin-left:-68px;border-radius:3px;background:#0d0d0d;z-index:46}
 .app{position:absolute;inset:0;padding-top:54px;display:flex;flex-direction:column}
-.app-h{height:46px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;color:#0d0d0d}
-.app-h > svg{width:22px;height:22px}
+.app-h{height:54px;flex:none;display:flex;align-items:center;gap:8px;padding:0 14px;color:#0d0d0d}
+.hb,.app-title,.hgrp{height:38px;background:#fff;box-shadow:0 1px 9px rgba(0,0,0,.09);display:flex;align-items:center}
+.hb{width:38px;border-radius:50%;justify-content:center}
+.hb svg{width:20px;height:20px}
+.app-title{padding:0 15px;border-radius:19px;font-size:15.5px;font-weight:500;color:#4a4a4a}
+.hgrp{margin-left:auto;padding:0 13px;border-radius:19px;gap:15px}
+.hgrp svg{width:19px;height:19px}
 .app-title{display:flex;align-items:center;gap:3px;font-size:16.5px;font-weight:600}
 .app-title svg{width:15px;height:15px;opacity:.45}
 .app-body{flex:1;min-height:0;overflow:hidden;position:relative;padding:0 18px}
@@ -283,17 +288,22 @@ svg{display:block}
 .app .answer li{margin:3px 0}
 .app .acts{gap:14px;margin-top:2px}
 .app .acts svg{width:16px;height:16px}
-.app .ad{margin-top:14px;opacity:0;transform:translateY(22px);transition:opacity .55s var(--ease),transform .7s var(--ease)}
-.app .ad.in{opacity:1;transform:none}
-.composer{flex:none;padding:6px 14px 30px}
-.cbox{display:flex;align-items:flex-end;gap:10px;min-height:50px;border-radius:25px;border:1px solid #E3E3E3;box-shadow:0 2px 12px rgba(0,0,0,.05);padding:7px 7px 7px 14px;font-size:15.5px;line-height:1.35;transition:border-color .2s}
-.cbox > svg{width:21px;height:21px;color:#5d5d5d;flex:none;margin-bottom:7px}
-.ctxt{flex:1;min-width:0;padding:7px 0;min-height:35px}
+.app .adunit{margin-top:12px;opacity:0;transform:translateY(22px);transition:opacity .55s var(--ease),transform .7s var(--ease)}
+.app .adunit.in{opacity:1;transform:none}
+.app .divider{margin:0 0 14px}
+.app .ad-note{font-size:11.5px;line-height:1.45;margin-top:11px}
+.composer{flex:none;display:flex;align-items:flex-end;gap:8px;padding:6px 12px 30px}
+.cplus{width:44px;height:44px;border-radius:50%;flex:none;background:#fff;box-shadow:0 1px 10px rgba(0,0,0,.1);display:grid;place-items:center;color:#3a3a3a}
+.cplus svg{width:20px;height:20px}
+.cbox{flex:1;min-width:0;display:flex;align-items:flex-end;gap:8px;min-height:44px;border-radius:22px;background:#fff;box-shadow:0 1px 10px rgba(0,0,0,.1);padding:5px 5px 5px 15px;font-size:15.5px;line-height:1.35}
+.cbox > svg{width:20px;height:20px;color:#5d5d5d;flex:none;margin-bottom:7px}
+.ctxt{flex:1;min-width:0;padding:6px 0;min-height:34px}
 .cph{color:#8e8e8e}
 .cbox.has .cph{display:none}
-.csend{width:36px;height:36px;border-radius:50%;background:#e5e5e5;color:#fff;display:grid;place-items:center;flex:none;transition:background .2s,transform .15s}
-.csend svg{width:18px;height:18px}
-.cbox.ready .csend{background:#0d0d0d}
+.csend{width:34px;height:34px;border-radius:50%;background:#0d0d0d;color:#fff;display:grid;place-items:center;flex:none;transition:transform .15s}
+.csend svg{width:17px;height:17px}
+.csend .i-up,.cbox.has .csend .i-wave{display:none}
+.cbox.has .csend .i-up{display:block}
 .csend.pressed{transform:scale(.88)}
 /* in-app browser + microsite */
 .sheet{position:absolute;inset:0;z-index:30;background:#fff;padding-top:54px;display:flex;flex-direction:column;transform:translateY(103%);transition:transform .62s cubic-bezier(.2,.85,.2,1);box-shadow:0 -12px 40px rgba(0,0,0,.18)}
@@ -472,12 +482,19 @@ svg{display:block}
 .m-t{font:700 13px/1.2 Inter}
 .m-f{margin-top:7px}
 .m-f label{display:block;font-size:9px;font-weight:600;color:#777;margin-bottom:3px}
-.m-i{height:23px;display:flex;align-items:center;padding:0 8px;border:1px solid #E4E4E4;border-radius:6px;font-size:10.5px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-i{height:23px;display:block;line-height:21px;padding:0 8px;border:1px solid #E4E4E4;border-radius:6px;font-size:10.5px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .m-b{display:inline-flex;align-items:center;height:24px;padding:0 12px;margin-top:10px;border-radius:6px;background:#0E0E0E;color:#fff;font-size:10px;font-weight:600}
 .m-g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
 .m-g2.w{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:start}
-.m-prev{border:1px solid #E4E4E4;border-radius:8px;padding:8px;position:relative;margin-top:8px}
-.m-sp{position:absolute;right:6px;top:6px;font-size:7.5px;font-weight:700;background:#FCEFD9;color:#7F5210;padding:2px 5px;border-radius:999px}
+.m-ad{display:flex;border:1px solid #E4E4E4;border-radius:8px;overflow:hidden;background:#fff;min-height:52px}
+.m-ai{width:46px;flex:none;display:grid;place-items:center}
+.m-ai svg{width:92%;height:92%}
+.m-at{flex:1;min-width:0;padding:5px 6px}
+.m-ab{display:flex;align-items:center;gap:3px;font-size:6.5px;color:#444;white-space:nowrap}
+.m-ab i{width:7px;height:7px;border-radius:50%;flex:none}
+.m-ab span{background:#F0F0F0;color:#888;border-radius:3px;padding:1px 3px;font-size:5.5px}
+.m-ah{font-size:7.5px;font-weight:700;line-height:1.2;margin-top:3px;color:#111}
+.m-at .m-pl{height:4px;margin-top:4px}
 .m-pi{width:44px;height:44px;border-radius:6px;background:#EAF5F1;overflow:hidden}
 .m-pl{height:6px;border-radius:3px;background:#E6E6E6;margin-top:7px}
 .m-pl.s{width:60%}
@@ -561,7 +578,7 @@ svg{display:block}
         <div class="acts" id="s2acts"></div>
         <div class="adwrap" id="s2ad"><div class="divider"></div><div class="slot"></div></div>
       </div></div>
-      <div class="win-comp"><div class="comp"><span data-i="plus"></span><span class="ph">Ask anything</span><span data-i="mic"></span><span class="send" data-i="up"></span></div></div>
+      <div class="win-comp"><div class="comp"><span data-i="plus"></span><span class="ph">Ask anything</span><span data-i="mic"></span><span class="send" data-i="wave"></span></div></div>
     </div>
     <div class="callouts">
       <div class="co" data-b="2"><i>01</i><div><b>Her question.</b>Pure intent.</div></div>
@@ -570,7 +587,7 @@ svg{display:block}
     </div>
     <div class="facts b-up" data-b="5" style="--d:450ms">
       <div class="fact"><span data-stat-plain="adsLive"></span><span class="src" data-src="adsLive"></span></div>
-      <div class="fact">Shown below answers, labelled Sponsored</div>
+      <div class="fact">Shown below answers, clearly labelled Ad</div>
       <div class="fact">Matched to the conversation, not a keyword</div>
     </div>
     <div class="disclaim">Illustrative mockup. Ad format based on ChatGPT Ads as launched in India, Aug 2026.</div>
@@ -747,9 +764,14 @@ const P = {
   target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/>',
   data: '<ellipse cx="12" cy="5.8" rx="7.5" ry="2.8"/><path d="M4.5 5.8v12.4c0 1.6 3.4 2.8 7.5 2.8s7.5-1.2 7.5-2.8V5.8M4.5 12c0 1.6 3.4 2.8 7.5 2.8s7.5-1.2 7.5-2.8"/>',
   user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.3-4 4.2-6 7.5-6s6.2 2 7.5 6"/>',
+  speaker: '<path d="M4 9.5h3.2L11.5 6v12l-4.3-3.5H4z"/><path d="M15 9.6a3.4 3.4 0 0 1 0 4.8M17.6 7.2a6.8 6.8 0 0 1 0 9.6"/>',
+  wave: '<path d="M6.5 10v4M10 7v10M13.5 9v6M17 11v2"/>',
+  addUser: '<circle cx="10" cy="8" r="3.6"/><path d="M3.5 19.5c1-3.6 3.6-5.6 6.5-5.6 1.4 0 2.7.4 3.8 1.2M18.5 13.5v6M15.5 16.5h6"/>',
   truck: '<path d="M2.5 6h11.5v10.5H2.5zM14 9.5h4.2l3.3 3.6v3.4H14"/><circle cx="6.5" cy="17.5" r="1.9"/><circle cx="17.5" cy="17.5" r="1.9"/>'
 };
-const SW = { check: 2.6, up: 2.4, chevL: 2.2, chevR: 2.2, chevDown: 2.2, menu: 2, plus: 2 };
+const MORE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18.5" cy="12" r="1.7"/></svg>';
+const ACTS = () => ['copy', 'speaker', 'thumbUp', 'thumbDown', 'refresh', 'share'].map(n => icon(n)).join('');
+const SW = { wave: 2.4, check: 2.6, up: 2.4, chevL: 2.2, chevR: 2.2, chevDown: 2.2, menu: 2, plus: 2 };
 const icon = (n, sw) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw || SW[n] || 1.75}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n] || ''}</svg>`;
 const GLYPH = {
   leaf: '<path fill="currentColor" d="M20.5 3.5C11.6 3.6 5 7.9 5 15c0 1.3.2 2.5.6 3.5 1.5-5.2 5.4-8.8 10.3-10.5-4.2 2.2-7.6 5.6-9.3 11.2 1.2.9 2.8 1.3 4.4 1.3 6 0 9.8-5.8 9.5-17z"/>',
@@ -806,14 +828,11 @@ function packSVG(sc) {
   return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
 }
 
-function adCard(sc, size, cta) {
-  const top = `<div class="ad-top"><span class="ad-fav">${glyph(sc.glyph)}</span><span class="ad-who"><span class="ad-name">${esc(sc.brand)}</span><span class="ad-dom">${esc(sc.domain)}</span></span><span class="ad-spon">Sponsored</span></div>`;
-  const img = `<div class="ad-img">${packSVG(sc)}</div>`;
-  const txt = `<div class="ad-hl">${esc(sc.headline)}</div><div class="ad-ds">${esc(sc.description)}</div>`;
-  const style = `--bc:${sc.colour};--bt:${tint(sc.colour, .88)}`;
-  if (size === 'lg') return `<div class="ad ad-lg" style="${style}">${top}<div class="ad-mid">${img}<div class="ad-txt">${txt}<span class="ad-btn">${esc(cta)}</span></div></div></div>`;
-  return `<div class="ad ad-sm" style="${style}">${top}<div class="ad-mid">${img}<div class="ad-txt">${txt}</div></div><span class="ad-btn">${esc(cta)}</span></div>`;
+function adCard(sc, size) {
+  const style = `--bc:${sc.colour};--bt:${tint(sc.colour, .8)}`;
+  return `<div class="ad ad-${size}" style="${style}"><div class="ad-img">${packSVG(sc)}</div><div class="ad-txt"><div class="ad-top"><span class="ad-fav">${glyph(sc.glyph)}</span><span class="ad-name">${esc(sc.brand)}</span><span class="ad-tag">Ad</span><span class="ad-more">${MORE}</span></div><div class="ad-hl"><span>${esc(sc.headline)}</span></div><div class="ad-ds">${esc(sc.description)}</div></div></div>`;
 }
+const AD_NOTE = '<p class="ad-note">Ads do not influence the answers you get. Your chats stay private. <b>Learn about ads and personalization ›</b></p>';
 
 function logoImg(dark, h) {
   const src = dark ? D.logoWhite : D.logo;
@@ -924,7 +943,7 @@ function inject() {
   $$('[data-cfg]').forEach(e => { e.textContent = D[e.dataset.cfg] || ''; });
   $$('[data-i]').forEach(e => { e.insertAdjacentHTML('afterbegin', icon(e.dataset.i)); });
   $$('.disc[data-i] svg').forEach(s => s.setAttribute('stroke-width', '1.5'));
-  $('#s2acts').innerHTML = icon('copy') + icon('thumbUp') + icon('thumbDown') + icon('refresh');
+  $('#s2acts').innerHTML = ACTS();
   $('#closeLogo').innerHTML = D.logoWhite ? `<img src="${esc(D.logoWhite)}" alt="FreeStand" onerror="this.outerHTML='<div class=&quot;logo-ph&quot;>FreeStand logo</div>'">` : '<div class="logo-ph">FreeStand logo</div>';
   // Slide 5 timeline
   const sc = D.scenarios[D.order[0]];
@@ -932,7 +951,7 @@ function inject() {
   const steps = [
     { t: 'Create an Ads Manager account', m: win('sign-up', `<div class="m-t">Create your Ads Manager account</div><div class="m-f"><label>Work email</label><div class="m-i">you@yourbrand.in</div></div><div class="m-f"><label>Business name</label><div class="m-i">Your brand</div></div><span class="m-b">Continue</span>`) },
     { t: 'Add billing in ₹. Budgets from ₹725 a day.', src: 'selfServe', m: win('billing', `<div class="m-t">Billing</div><div class="m-g2"><div class="m-f"><label>Currency</label><div class="m-i">INR (₹)</div></div><div class="m-f"><label>Daily budget</label><div class="m-i">₹725</div></div></div><div class="m-f"><label>Payment method</label><div class="m-i">Business card</div></div>`) },
-    { t: 'Build the ad: headline, description, image, and your FreeStand sampling link', m: win('new-ad', `<div class="m-g2 w"><div><div class="m-f" style="margin-top:0"><label>Headline</label><div class="m-i">${esc(sc.headline)}</div></div><div class="m-f"><label>Description</label><div class="m-i">${esc(sc.description)}</div></div><div class="m-f"><label>Link</label><div class="m-i">${esc(sc.domain)}</div></div></div><div class="m-prev" style="margin-top:0"><span class="m-sp">Sponsored</span><div class="m-pi" style="background:${tint(sc.colour, .88)}">${packSVG(sc)}</div><div class="m-pl"></div><div class="m-pl s"></div></div></div>`) },
+    { t: 'Build the ad: headline, description, image, and your FreeStand sampling link', m: win('new-ad', `<div class="m-g2 w"><div><div class="m-f" style="margin-top:0"><label>Headline</label><div class="m-i">${esc(sc.headline)}</div></div><div class="m-f"><label>Description</label><div class="m-i">${esc(sc.description)}</div></div><div class="m-f"><label>Link</label><div class="m-i">${esc(sc.domain)}</div></div></div><div><label style="display:block;font-size:9px;font-weight:600;color:#777;margin-bottom:3px">Preview</label><div class="m-ad"><div class="m-ai" style="background:${tint(sc.colour, .85)}">${packSVG(sc)}</div><div class="m-at"><div class="m-ab"><i style="background:${sc.colour}"></i>${esc(sc.brand)}<span>Ad</span></div><div class="m-ah">${esc(sc.headline)}</div><div class="m-pl"></div><div class="m-pl s"></div></div></div></div></div>`) },
     { t: 'Publish', m: win('campaigns', `<div class="m-t">Campaigns</div><div class="m-row"><span>${esc(sc.brand)} sampling</span><span class="m-tg"><i></i>Live</span></div><div class="m-toast">${icon('check')}Campaign published</div>`) }
   ];
   $('#tsteps').innerHTML = steps.map((s, k) => `<div class="tstep" style="--k:${k}"><span class="tnode">${k + 1}</span><div class="thumb">${s.m}</div><p>${esc(s.t)}</p>${s.src ? `<span class="src">${esc(STATS[s.src].text)}. Source: ${esc(STATS[s.src].src)}</span>` : ''}</div>`).join('');
@@ -1039,8 +1058,8 @@ const S1 = def({
 /* ---- Slide 2 ---- */
 const S2 = def({
   sel: '#s2', steps: 5, title: 'Be there at the moment of the question', theme: () => 'light',
-  notes: 'Three things to point at: her question, where the ad sits (under the answer, labelled Sponsored, never inside it), and the offer. Not a banner. A free trial at the exact moment of need.',
-  next: ['Her question types out', 'The answer streams. Callout 1', 'The Sponsored card. Callout 2', 'The CTA pulses. Callout 3', 'Headline and facts'],
+  notes: 'Three things to point at: her question, where the ad sits (under the answer, labelled Ad, never inside it), and the offer in the headline. Not a banner. A free trial at the exact moment of need.',
+  next: ['Her question types out', 'The answer streams. Callout 1', 'The ad card. Callout 2', 'The free offer highlights. Callout 3', 'Headline and facts'],
   reset() {
     const p = D.pitch, sc = D.scenarios[p.scenario];
     const q = $('#s2q'); q.classList.remove('show'); $('.t', q).textContent = '';
@@ -1048,7 +1067,7 @@ const S2 = def({
     $('#s2ans').innerHTML = '';
     $('#s2acts').classList.remove('show');
     $('#s2ad').classList.remove('show');
-    $('#s2ad .slot').innerHTML = adCard(sc, 'lg', p.cta);
+    $('#s2ad .slot').innerHTML = adCard(sc, 'lg') + AD_NOTE;
   },
   async step(n, fx) {
     const p = D.pitch;
@@ -1100,9 +1119,9 @@ function screenHTML(sc) {
   <div class="sb"><span>9:41</span><span class="sb-r"><span>${esc(D.network || '')}</span>${SIGNAL}<span>5G</span>${BATTERY}</span></div>
   <div class="island"></div>
   <div class="app">
-    <div class="app-h">${icon('menu')}<span class="app-title">AI assistant${icon('chevDown')}</span>${icon('edit')}</div>
+    <div class="app-h"><span class="hb">${icon('menu')}</span><span class="app-title">AI assistant</span><span class="hgrp">${icon('edit')}${icon('addUser')}${MORE}</span></div>
     <div class="app-body"><div class="empty">What can I help with?</div><div class="thread"></div></div>
-    <div class="composer"><div class="cbox">${icon('plus')}<div class="ctxt"><span class="cph">Ask anything</span><span class="ct"></span></div>${icon('mic')}<span class="csend">${icon('up')}</span></div></div>
+    <div class="composer"><span class="cplus">${icon('plus')}</span><div class="cbox"><div class="ctxt"><span class="cph">Ask anything</span><span class="ct"></span></div>${icon('mic')}<span class="csend"><span class="i-wave">${icon('wave')}</span><span class="i-up">${icon('up')}</span></span></div></div>
   </div>
   <div class="sheet">
     <div class="urlbar"><span class="ub-done">Done</span><span class="ub-url">${LOCK}${esc(sc.domain)}</span><span class="ub-r">${icon('refresh')}</span></div>
@@ -1154,7 +1173,7 @@ function screenHTML(sc) {
 const S3 = def({
   sel: '#s3', steps: 5, title: 'See it live', theme: () => 'dark',
   notes: 'Pick the tab closest to the brand in the room and let it run. Then point at the right-hand panel: every tap is something the brand now owns.',
-  next: ['She asks, the AI answers', 'Sponsored card, tap, microsite opens', 'Sign-up and OTP', 'Three qualifying questions', 'Address, WhatsApp opt-in, dispatched'],
+  next: ['She asks, the AI answers', 'The ad, tap, microsite opens', 'Sign-up and OTP', 'Three qualifying questions', 'Address, WhatsApp opt-in, dispatched'],
   key: null,
   reset() {
     if (!this.key) this.key = (D.order || Object.keys(D.scenarios))[0];
@@ -1260,14 +1279,14 @@ const S3 = def({
       await fx.wait(1250); th.remove();
       const ans = frag('<div class="answer"></div>'); P.thread.append(ans);
       await fx.stream(ans, sc.answer, { min: 16, max: 44 });
-      const acts = frag(`<div class="acts">${icon('copy')}${icon('thumbUp')}${icon('thumbDown')}${icon('refresh')}</div>`); P.thread.append(acts); fx.show(acts);
+      const acts = frag(`<div class="acts">${ACTS()}</div>`); P.thread.append(acts); fx.show(acts);
       this.follow(fx);
     }
     if (n === 2) {
-      const ad = frag(adCard(sc, 'sm', 'Get free sample')); P.thread.append(ad);
-      this.follow(fx); fx.show(ad);
+      const unit = frag(`<div class="adunit"><div class="divider"></div>${adCard(sc, 'sm')}${AD_NOTE}</div>`); P.thread.append(unit);
+      this.follow(fx); fx.show(unit);
       await fx.wait(1500);
-      await this.tap(fx, $('.ad-btn', ad));
+      await this.tap(fx, $('.ad', unit));
       P.sheet.classList.add('open');
       await fx.wait(250); this.hideCursor(); await fx.wait(500);
     }
